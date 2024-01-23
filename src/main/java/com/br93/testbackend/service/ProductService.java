@@ -42,5 +42,9 @@ public class ProductService {
 
         return this.createProduct(product);
     }
+
+    public void deleteProduct(String id) {
+        this.productRepository.deleteById(id);
+    }
     
 }

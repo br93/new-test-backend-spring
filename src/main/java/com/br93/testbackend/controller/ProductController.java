@@ -2,6 +2,7 @@ package com.br93.testbackend.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -43,5 +44,12 @@ public class ProductController {
         ProductDTO response = this.productMapper.toDTO(updated);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
+        this.productService.deleteProduct(id);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

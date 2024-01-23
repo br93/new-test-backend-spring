@@ -4,10 +4,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -100,5 +103,15 @@ class ProductServiceTest {
 
         assertThrowsExactly(ProductNotFoundException.class,
                 () -> productService.updateProduct(productId, mockProduct));
+    }
+
+    @Test
+    void deleteProductShouldCallTheDeleteMethod() {
+        when(productRepository.findById(anyString())).thenReturn(Optional.of(mockProduct));
+        
+        String id = UUID.randomUUID().toString();
+        productService.deleteProduct(id);
+
+        verify(productRepository, times(1)).deleteById(id);
     }
 }
