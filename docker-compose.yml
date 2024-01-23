@@ -1,0 +1,17 @@
+version: '3.3'
+services:
+ test-backend:
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: test-backend
+    env_file:
+      - ./docker.env
+    ports:
+      - 8080:8080
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge
