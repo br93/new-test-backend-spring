@@ -9,6 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.br93.testbackend.exception.CategoryInvalidException;
 import com.br93.testbackend.exception.CategoryNotFoundException;
 import com.br93.testbackend.exception.ProductInvalidException;
+import com.br93.testbackend.exception.ProductNotFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
@@ -31,5 +32,10 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({IllegalArgumentException.class})
     public ProblemDetail handleIllegalArgumentException(IllegalArgumentException exception){
         return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+    }
+
+    @ExceptionHandler({ ProductNotFoundException.class })
+    public ProblemDetail handleProductNotFoundException(ProductNotFoundException exception) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, exception.getMessage());
     }
 }

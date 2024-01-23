@@ -1,8 +1,10 @@
 package com.br93.testbackend.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -24,6 +26,7 @@ import com.br93.testbackend.data.dto.ProductDTO;
 import com.br93.testbackend.exception.CategoryInvalidException;
 import com.br93.testbackend.exception.CategoryNotFoundException;
 import com.br93.testbackend.exception.ProductInvalidException;
+import com.br93.testbackend.exception.ProductNotFoundException;
 import com.br93.testbackend.service.ProductService;
 import com.br93.testbackend.util.Parser;
 import com.br93.testbackend.util.mapper.ProductMapper;
@@ -43,6 +46,9 @@ class ProductControllerTest {
     private Product mockProduct;
     private ProductDTO mockDTO;
 
+    private Product mockUpdated;
+    private ProductDTO mockUpdatedDTO;
+
     private Category mockCategory;
 
     private final String title = "title";
@@ -50,6 +56,7 @@ class ProductControllerTest {
     private final BigDecimal price = BigDecimal.ONE;
     private final String ownerId = "ownerId";
     private final String categoryId = "categoryId";
+    private final String productId = "productId";
    
 
     @BeforeEach
@@ -59,6 +66,12 @@ class ProductControllerTest {
         mockProduct = new Product(null, title, description, price, mockCategory, ownerId);
         
         mockDTO = new ProductDTO(title, description, price, categoryId, ownerId);
+
+        mockUpdated = mockProduct;
+        mockUpdated.setPrice(BigDecimal.TEN);
+
+        mockUpdatedDTO = mockDTO;
+        mockUpdatedDTO.setPrice(BigDecimal.TEN);
 
     }
 
@@ -129,5 +142,45 @@ class ProductControllerTest {
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpectAll(status().isNotFound(), content().contentType(MediaType.APPLICATION_PROBLEM_JSON))
                 .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    void shouldPutProductStatus200_Success() throws Exception {
+
+        when(productMapper.toEntity(any(ProductDTO.class))).thenReturn(mockUpdated);
+        when(productService.updateProduct(anyString(), any(Product.class))).thenReturn(mockUpdated);
+        when(productMapper.toDTO(any(Product.class))).thenReturn(mockUpdatedDTO);
+
+        mockMvc.perform(put("/api/v1/product/{id}", productId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Parser.parse(mockUpdatedDTO))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpectAll(status().isOk(), jsonPath("$.price").value(BigDecimal.TEN));
+    }
+
+    @Test
+    void shouldPutProductStatus404_ProductNotFound() throws Exception {
+
+        when(productMapper.toEntity(any(ProductDTO.class))).thenReturn(mockUpdated);
+        when(productService.updateProduct(anyString(), any(Product.class))).thenThrow(new ProductNotFoundException("Product not found"));
+        
+        mockMvc.perform(put("/api/v1/product/{id}", productId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Parser.parse(mockUpdatedDTO))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpectAll(status().isNotFound(), content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
+    }
+
+    @Test
+    void shouldPutProductStatus400_InvalidProduct() throws Exception {
+
+        when(productMapper.toEntity(any(ProductDTO.class))).thenReturn(mockUpdated);
+        when(productService.updateProduct(anyString(), any(Product.class))).thenThrow(new ProductInvalidException("Product invalid"));
+        
+        mockMvc.perform(put("/api/v1/product/{id}", productId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(Parser.parse(mockUpdatedDTO))
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpectAll(status().isBadRequest(), content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
     }
 }
