@@ -1,5 +1,7 @@
 package com.br93.testbackend.service;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 
 import com.br93.testbackend.data.Category;
@@ -23,5 +25,9 @@ public class CategoryService {
         }
 
         return this.categoryRepository.save(category);
+    }
+
+    public Optional<Category> findCategoryById(String id) {
+        return this.categoryRepository.findById(id);
     }
 }

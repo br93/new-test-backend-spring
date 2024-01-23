@@ -3,7 +3,11 @@ package com.br93.testbackend.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+
+import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,9 +50,18 @@ class CategoryServiceTest {
     }
 
     @Test
-    void createCategoryShouldThrowCategoryNullExceptionIfCategoryInvalid() {
+    void createCategoryShouldThrowCategoryInvalidExceptionIfCategoryInvalid() {
 
         when(categoryValidation.isValidCategory(any(Category.class))).thenReturn(false);
         assertThrowsExactly(CategoryInvalidException.class, () -> categoryService.createCategory(mockCategory));
+    }
+
+    @Test
+    void findCategoryByIdShouldReturnOptionalOfCategory() {
+        when(categoryRepository.findById(anyString())).thenReturn(Optional.of(mockCategory));
+
+        Optional<Category> optional = categoryService.findCategoryById(UUID.randomUUID().toString());
+
+        assertEquals(Optional.of(mockCategory), optional);
     }
 }
