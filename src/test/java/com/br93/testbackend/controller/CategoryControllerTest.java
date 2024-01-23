@@ -3,6 +3,7 @@ package com.br93.testbackend.controller;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -134,5 +135,16 @@ class CategoryControllerTest {
                 .content(Parser.parse(mockUpdatedDTO))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpectAll(status().isBadRequest(), content().contentType(MediaType.APPLICATION_PROBLEM_JSON));
+    }
+
+    @Test
+    void shouldDeleteCategoryStatus204_Success() throws Exception {
+        
+        String id = UUID.randomUUID().toString();
+
+        mockMvc.perform(delete("/api/v1/category/{id}", id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
     }
 }

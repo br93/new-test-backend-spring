@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Optional;
@@ -23,7 +25,7 @@ import com.br93.testbackend.util.validation.CategoryValidation;
 
 @SpringBootTest
 class CategoryServiceTest {
-    
+
     @Autowired
     private CategoryService categoryService;
 
@@ -35,6 +37,8 @@ class CategoryServiceTest {
 
     private Category mockCategory;
     private Category mockUpdated;
+
+    private final String categoryId = "categoryId";
 
     @BeforeEach
     void setup() {
@@ -85,5 +89,12 @@ class CategoryServiceTest {
 
         assertThrowsExactly(CategoryNotFoundException.class,
                 () -> categoryService.updateCategory(UUID.randomUUID().toString(), mockUpdated));
+    }
+
+    @Test
+    void deleteCategoryShouldCallTheDeleteMethod() {
+        categoryService.deleteCategory(categoryId);
+
+        verify(categoryRepository, times(1)).deleteById(categoryId);
     }
 }

@@ -42,4 +42,8 @@ public class CategoryService {
 
         return this.createCategory(category);
     }
+
+    public void deleteCategory(String id) {
+        this.categoryRepository.deleteById(id);
+    }
 }
