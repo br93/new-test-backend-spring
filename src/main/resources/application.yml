@@ -1,0 +1,13 @@
+spring:
+    data:
+        mongodb:
+            authentication-database: admin
+            database: products-catalog
+            uri: mongodb://${mongo.user}:${mongo.password}@${mongo.host}:${mongo.port}/${spring.data.mongodb.database}?authSource=${spring.data.mongodb.authentication-database}
+            auto-index-creation: true
+
+mongo:
+    host: ${MONGO_HOST:localhost}
+    port: ${MONGO_PORT:27017}
+    user: ${MONGO_USER:mongoadmin}
+    password: ${MONGO_PASSWORD:mongo}
