@@ -5,6 +5,9 @@ spring:
             database: products-catalog
             uri: mongodb://${mongo.user}:${mongo.password}@${mongo.host}:${mongo.port}/${spring.data.mongodb.database}?authSource=${spring.data.mongodb.authentication-database}
             auto-index-creation: true
+    mvc:
+        problemdetails:
+            enabled: true
 
 mongo:
     host: ${MONGO_HOST:localhost}
