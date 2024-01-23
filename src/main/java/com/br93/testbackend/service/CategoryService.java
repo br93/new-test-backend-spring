@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.br93.testbackend.data.Category;
 import com.br93.testbackend.exception.CategoryInvalidException;
+import com.br93.testbackend.exception.CategoryNotFoundException;
 import com.br93.testbackend.repository.CategoryRepository;
 import com.br93.testbackend.util.validation.CategoryValidation;
 
@@ -29,5 +30,16 @@ public class CategoryService {
 
     public Optional<Category> findCategoryById(String id) {
         return this.categoryRepository.findById(id);
+    }
+
+     public Category updateCategory(String id, Category newCategory) {
+        var category = this.findCategoryById(id).orElseThrow(() -> new CategoryNotFoundException("Category not found"));
+
+        if (!newCategory.getTitle().isEmpty())
+            category.setTitle(newCategory.getTitle());
+        if (!newCategory.getDescription().isEmpty())
+            category.setDescription(newCategory.getDescription());
+
+        return this.createCategory(category);
     }
 }

@@ -2,7 +2,9 @@ package com.br93.testbackend.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,5 +33,15 @@ public class CategoryController {
         CategoryDTO response = this.categoryMapper.toDTO(created);
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<CategoryDTO> updateCategory(@PathVariable String id, @Valid @RequestBody CategoryDTO request) {
+
+        Category category = this.categoryMapper.toEntity(request);
+        Category updated = this.categoryService.updateCategory(id, category);
+        CategoryDTO response = this.categoryMapper.toDTO(updated);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
