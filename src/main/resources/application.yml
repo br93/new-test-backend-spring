@@ -16,8 +16,6 @@ spring:
         username: ${RABBITMQ_USER:guest}
         password: ${RABBITMQ_PASSWORD:guest}
 
-
-
 mongo:
     host: ${MONGO_HOST:localhost}
     port: ${MONGO_PORT:27017}
@@ -28,3 +26,13 @@ rabbitmq:
     queue-name: ${RABBITMQ_NAME:catalog-emit}
     exchange: ${RABBITMQ_EXCHANGE:rabbit-exchange}
     routing-key: ${RABBITMQ_KEY:routing-key}
+
+minio:
+    host: ${MINIO_HOST:localhost}
+    port: ${MINIO_PORT:9000}
+    endpoint: http://${minio.host}:${minio.port}
+    access-key: ${MINIO_ACCESS_KEY:minioadmin}
+    secret-key: ${MINIO_SECRET_KEY:miniosecretkey}
+    bucket-name: ${MINIO_BUCKET:bucket-catalog}
+    file-size: 10485760
+    secure: false

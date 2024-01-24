@@ -17,6 +17,7 @@
 		<java.version>17</java.version>
 		<testcontainers.version>1.19.3</testcontainers.version>
 		<awaitility.version>4.2.0</awaitility.version>
+		<minio.version>8.5.7</minio.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -40,6 +41,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-amqp</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>io.minio</groupId>
+			<artifactId>minio</artifactId>
+			<version>${minio.version}</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
