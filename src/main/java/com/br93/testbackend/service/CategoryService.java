@@ -1,5 +1,6 @@
 package com.br93.testbackend.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -45,5 +46,9 @@ public class CategoryService {
 
     public void deleteCategory(String id) {
         this.categoryRepository.deleteById(id);
+    }
+
+    public List<Category> findAllByOwnerId(String ownerId) {
+        return this.categoryRepository.findAllByOwnerId(ownerId);
     }
 }

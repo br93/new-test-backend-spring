@@ -1,5 +1,6 @@
 package com.br93.testbackend.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -59,7 +60,10 @@ public class ProductService {
 
         this.producer.send(Message.builder().owner(product.getOwnerId()).build());
         this.productRepository.deleteById(id);
+    }
 
+    public List<Product> findAllProductsByCategoryId(String categoryId) {
+        return this.productRepository.findAllByCategory_Id(categoryId);
     }
 
 }
