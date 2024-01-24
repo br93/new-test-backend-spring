@@ -1,4 +1,4 @@
-up: logs
+up: build
 	@echo "Starting services..."
 	docker compose up -d
 	@echo "Done"

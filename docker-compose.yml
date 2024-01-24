@@ -93,7 +93,9 @@ services:
     networks:
       - test-network
     
-
+volumes:
+  mongo-data:
+    name: mongo-data
 
 networks:
   test-network:
